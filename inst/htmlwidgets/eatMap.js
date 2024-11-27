@@ -32332,6 +32332,7 @@ HTMLWidgets.widget({
         // TODO: code to render the widget, e.g.
         // el.innerText = x.message;
 
+        console.log(x.data);
         drawMap(x.data);
       },
 

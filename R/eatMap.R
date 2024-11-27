@@ -1,4 +1,4 @@
-#' <Add Title>
+#' Plot a card.
 #'
 #' <Add Description>
 #'

@@ -141,7 +141,17 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
         } = d;
 
         const stateData = data.find((el) => el.Bundesland === stateName);
-        return stateData ? colorScale(stateData.est_delimited) : "#ccc";
+        if (stateData.est) {
+          const est =
+            stateData.est < min
+              ? min
+              : stateData.est > max
+              ? max
+              : stateData.est;
+          return colorScale(stateData.est);
+        } else {
+          return "#ccc";
+        }
       })
       .on("mouseover", function (event, d) {
         const stateName = d.properties.NAME_1;

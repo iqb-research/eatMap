@@ -5,11 +5,12 @@
 #' @import htmlwidgets
 #'
 #' @export
-eatMap <- function(data, width = NULL, height = NULL, elementId = NULL) {
+eatMap <- function(data, config, width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
   x = list(
-    data = purrr::list_transpose(as.list(data))
+    data = purrr::list_transpose(as.list(data)),
+    config = config
   )
 
   # create widget

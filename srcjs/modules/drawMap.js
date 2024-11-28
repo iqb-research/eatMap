@@ -50,33 +50,6 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
       d3.select(this).style("fill-opacity", 1);
     });
 
-  const labels = {
-    Mittelwert: "Kompetenzmittelwert",
-    Streuung: "Streuung",
-    "Mindeststandard verfehlt (%)": "Mindeststandard verfehlt (%)",
-    "Regelstandard erreicht (%)": "Regelstandard erreicht (%)",
-    "Optimalstandard erreicht (%)": "Optimalstandard erreicht (%)",
-    "Mindeststandard für ESA verfehlt (%)":
-      "Mindeststandard für ESA verfehlt (%)",
-    "Mindeststandard für MSA verfehlt (%)":
-      "Mindeststandard für MSA verfehlt (%)",
-    "Optimalstandard für MSA erreicht (%)":
-      "Optimalstandard für MSA erreicht (%)",
-    "Regelstandard für MSA erreicht (%)": "Regelstandard für MSA erreicht (%)",
-  };
-
-  const valueRange = {
-    Mittelwert: [405, 595],
-    Streuung: [75, 125],
-    "Mindeststandard verfehlt (%)": [5, 30],
-    "Mindeststandard für ESA verfehlt (%)": [0, 20],
-    "Mindeststandard für MSA verfehlt (%)": [5, 30],
-    "Regelstandard erreicht (%)": [40, 80],
-    "Regelstandard für MSA erreicht (%)": [30, 75],
-    "Optimalstandard erreicht (%)": [0, 25],
-    "Optimalstandard für MSA erreicht (%)": [0, 20],
-  };
-
   // Add a legend to the map
   const addLegend = (
     colorScale,
@@ -149,11 +122,15 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
   };
 
   // Update function to modify the map with new data
-  const updateMap = (data) => {
+  const updateMap = (data, config) => {
+    // Get current parameter
+    const currentParameter = data[0].parameter;
+    const { min, max } = config.parameter[currentParameter].range;
+
     // Create a color scale
     const colorScale = d3
       .scaleSequential()
-      .domain(valueRange[data[0].parameter]) // Adjust domain as needed
+      .domain([min, max]) // Adjust domain as needed
       .interpolator(d3.interpolateViridis);
 
     states
@@ -198,7 +175,7 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
 
     // Add or update the legend whenever data is updated
     svg.select(".legend").remove(); // Remove the previous legend
-    addLegend(colorScale, labels[data[0].parameter]);
+    addLegend(colorScale, config.parameter[currentParameter].label);
   };
 
   // Return the update function so it can be called externally

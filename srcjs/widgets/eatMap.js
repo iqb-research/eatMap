@@ -22,9 +22,9 @@ HTMLWidgets.widget({
       renderValue: function (x) {
         // TODO: code to render the widget, e.g.
         // el.innerText = x.message;
-
+        console.log(x);
         // console.log(x.data);
-        updateMap(x.data);
+        updateMap(x.data, x.config);
       },
 
       resize: function (width, height) {

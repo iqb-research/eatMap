@@ -157,22 +157,22 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
         const stateName = d.properties.NAME_1;
         const stateData = data.find((el) => el.Bundesland === stateName);
 
-        if (stateData) {
-          tooltip
-            .html(`<b>${stateName}</b>: ${stateData.est_print}`)
-            .style("left", event.pageX + 10 + "px")
-            .style("top", event.pageY - 28 + "px")
-            .style("opacity", 1)
-            .style("position", "absolute")
-            .style("padding", "8px")
-            .style("background", "rgba(0, 0, 0, 0.7)")
-            .style("color", "#fff")
-            .style("border-radius", "4px")
-            .style("pointer-events", "none")
-            .style("font-size", "14px")
-            // .style("font-weight", "bold")
-            .style("font-family", "Arial");
-        }
+        tooltip
+          .html(
+            `<b>${stateName}</b>: ${stateData?.est_print || "keine Angabe"}`
+          )
+          .style("left", event.pageX + 10 + "px")
+          .style("top", event.pageY - 28 + "px")
+          .style("opacity", 1)
+          .style("position", "absolute")
+          .style("padding", "8px")
+          .style("background", "rgba(0, 0, 0, 0.7)")
+          .style("color", "#fff")
+          .style("border-radius", "4px")
+          .style("pointer-events", "none")
+          .style("font-size", "14px")
+          // .style("font-weight", "bold")
+          .style("font-family", "Arial");
       })
       .on("mousemove", function (event) {
         tooltip

@@ -141,14 +141,14 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
         } = d;
 
         const stateData = data.find((el) => el.Bundesland === stateName);
-        if (stateData.est) {
+        if (stateData) {
           const est =
             stateData.est < min
               ? min
               : stateData.est > max
               ? max
               : stateData.est;
-          return colorScale(stateData.est);
+          return colorScale(est);
         } else {
           return "#ccc";
         }

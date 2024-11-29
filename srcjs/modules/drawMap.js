@@ -54,6 +54,7 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
   const addLegend = (
     colorScale,
     legendTitle,
+    reverse,
     legendWidth = 300,
     legendHeight = 20
   ) => {
@@ -74,17 +75,14 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
 
     // Add gradient stops
     const colorRange = d3.range(0, 1.01, 0.1);
+    const colorMin = reverse ? colorScale.domain()[1] : colorScale.domain()[0];
+    const colorMax = reverse ? colorScale.domain()[0] : colorScale.domain()[1];
+
     colorRange.forEach((t) => {
       linearGradient
         .append("stop")
         .attr("offset", `${t * 100}%`)
-        .attr(
-          "stop-color",
-          colorScale(
-            colorScale.domain()[0] +
-              t * (colorScale.domain()[1] - colorScale.domain()[0])
-          )
-        );
+        .attr("stop-color", colorScale(colorMin + t * (colorMax - colorMin)));
     });
 
     // Append the gradient rect
@@ -97,7 +95,7 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
     // Add axis for the legend
     const legendScale = d3
       .scaleLinear()
-      .domain(colorScale.domain())
+      .domain([colorMin, colorMax])
       .range([0, legendWidth]);
 
     const legendAxis = d3
@@ -127,10 +125,13 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
     const currentParameter = data[0].parameter;
     const { min, max } = config.parameter[currentParameter].range;
 
+    const reverse = config.parameter[currentParameter].reverse;
+    const limits = reverse ? [max, min] : [min, max];
+
     // Create a color scale
     const colorScale = d3
       .scaleSequential()
-      .domain([min, max]) // Adjust domain as needed
+      .domain(limits)
       .interpolator(d3.interpolateViridis);
 
     states
@@ -185,7 +186,7 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
 
     // Add or update the legend whenever data is updated
     svg.select(".legend").remove(); // Remove the previous legend
-    addLegend(colorScale, config.parameter[currentParameter].label);
+    addLegend(colorScale, config.parameter[currentParameter].label, reverse);
   };
 
   // Return the update function so it can be called externally

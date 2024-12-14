@@ -7,26 +7,22 @@ HTMLWidgets.widget({
   type: "output",
 
   factory: function (el, width, height) {
-    const divMap = document.createElement("div");
-    divMap.id = "map-container";
-    el.appendChild(divMap);
+    el.style.width = width;
+    el.style.height = height;
 
-    const divTooltip = document.createElement("div");
-    divTooltip.id = "tooltip-container";
-    divTooltip.classList.add("tooltip");
-    el.appendChild(divTooltip);
-
-    const updateMap = drawMap("map-container", "tooltip-container");
+    const updateMap = drawMap(el.id);
 
     return {
-      renderValue: function (x) {
-        // TODO: code to render the widget, e.g.
-        // el.innerText = x.message;
-        // console.log(x.data);
-        updateMap(x.data, x.config);
+      renderValue: function ({ data, config }) {
+        // TODO: remove this hotfix when the Shiny environment only provides valid data!
+        if (data.length !== 0) {
+          updateMap(data, config);
+        }
       },
 
       resize: function (width, height) {
+        el.style.width = width;
+        el.style.height = height;
         // TODO: code to re-render the widget with a new size
       },
     };

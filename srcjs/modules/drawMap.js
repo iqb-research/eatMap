@@ -4,15 +4,22 @@ import * as geojson from "./gadm41_DEU_1.json";
 import styles from "./drawMap.css";
 
 // The drawMap function initializes the SVG and static map elements
-const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
+const drawMap = (containerId, width = 800, height = 900) => {
   // Create SVG element
-  const svg = d3
+  const container = d3
     .select(`#${containerId}`)
+    .style("max-width", "fit-content")
+    .style("margin-left", "auto")
+    .style("margin-right", "auto");
+
+  const svg = container
     .append("svg")
-    .attr("viewBox", `0 0 900 1000`)
+    .attr("viewBox", `0 0 800 1000`)
     .attr("preserveAspectRatio", "xMidYMid meet")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .style("position", "relative")
+    .style("height", "95vh");
 
   // Projection and path generator
   const projection = d3
@@ -22,9 +29,6 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
     .translate([width / 2, height / 2]);
 
   const path = d3.geoPath().projection(projection);
-
-  // Tooltip element
-  const tooltip = d3.select(`#${tooltipId}`);
 
   // Create state groups and paths
   const states = svg
@@ -49,6 +53,40 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
     .on("mouseout", function () {
       d3.select(this).style("fill-opacity", 1);
     });
+
+  // Tooltip element
+
+  // create a tooltip
+  const tooltipGroup = svg
+    .append("g")
+    .attr("transform", "translate(0, 500)")
+    .attr("id", "tooltip")
+    .style("visibility", "hidden");
+
+  // TODO: Potentially remove this hotfix
+  svg.on("mousemove", (e) => {
+    const [x, y] = d3.pointer(e);
+
+    tooltipGroup.attr("transform", `translate(${x + 30}, ${y + 30})`);
+  });
+
+  const tooltip = tooltipGroup
+    .append("foreignObject")
+    .attr("width", 600)
+    .attr("height", 500)
+    .append("xhtml:div") // Use xhtml namespace for embedded HTML
+    .style("margin-top", "auto")
+    // .style("width", "100%")
+    // .style("height", "100%")
+    .style("font-size", "20px")
+    .style("font-family", "Arial")
+    .style("border-radius", "8px")
+    .style("background-color", "rgba(0, 0, 0, 0.8)")
+    .style("color", "white")
+    .style("padding", "8px")
+    .style("position", "absolute")
+    .style("pointer-events", "none")
+    .html(`<b>Mecklenburg-Vorpommern</b></br>Keine Angabe`);
 
   // Add a legend to the map
   const addLegend = (
@@ -158,30 +196,23 @@ const drawMap = (containerId, tooltipId, width = 800, height = 900) => {
         const stateName = d.properties.NAME_1;
         const stateData = data.find((el) => el.Bundesland === stateName);
 
-        tooltip
-          .html(
-            `<b>${stateName}</b>: ${stateData?.est_print || "keine Angabe"}`
-          )
-          .style("left", event.pageX + 10 + "px")
-          .style("top", event.pageY - 28 + "px")
-          .style("opacity", 1)
-          .style("position", "absolute")
-          .style("padding", "8px")
-          .style("background", "rgba(0, 0, 0, 0.7)")
-          .style("color", "#fff")
-          .style("border-radius", "4px")
-          .style("pointer-events", "none")
-          .style("font-size", "14px")
-          // .style("font-weight", "bold")
-          .style("font-family", "Arial");
+        tooltip.html(
+          `<b>${stateName}</b></br>${stateData?.est_print || "keine Angabe"}`
+        );
+
+        tooltipGroup.style("visibility", "visible");
       })
-      .on("mousemove", function (event) {
-        tooltip
-          .style("left", event.pageX + 10 + "px")
-          .style("top", event.pageY - 28 + "px");
-      })
+      // .on("mousemove", function (event) {
+      //   // const [x, y] = d3.pointer(event, d3.select(document).node());
+      //   // window.doc = d3.select(document);
+      //   // window.body = d3.select(document.body);
+      //   // const [xT, yT] = d3.pointer(event, svg.node());
+      //   // // console.log(x, y);
+      //   // // console.log(xT, yT);
+      //   // tooltip.style("left", `${x + 10}px`).style("top", `${y - 28}px`);
+      // })
       .on("mouseout", function () {
-        tooltip.style("opacity", 0);
+        tooltipGroup.style("visibility", "hidden");
       });
 
     // Add or update the legend whenever data is updated

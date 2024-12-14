@@ -41,7 +41,7 @@ eatMap <- function(data, config, width = NULL, height = NULL, elementId = NULL) 
 #' @name eatMap-shiny
 #'
 #' @export
-eatMapOutput <- function(outputId, width = '100%', height = '400px'){
+eatMapOutput <- function(outputId, width = '50%', height = '50px'){
   htmlwidgets::shinyWidgetOutput(outputId, 'eatMap', width, height, package = 'eatMap')
 }
 

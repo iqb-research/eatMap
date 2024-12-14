@@ -113,8 +113,10 @@ const drawMap = (containerId, width = 800, height = 900) => {
 
     // Add gradient stops
     const colorRange = d3.range(0, 1.01, 0.1);
-    const colorMin = reverse ? colorScale.domain()[1] : colorScale.domain()[0];
-    const colorMax = reverse ? colorScale.domain()[0] : colorScale.domain()[1];
+    // const colorMin = reverse ? colorScale.domain()[1] : colorScale.domain()[0];
+    // const colorMax = reverse ? colorScale.domain()[0] : colorScale.domain()[1];
+    const colorMin = colorScale.domain()[0];
+    const colorMax = colorScale.domain()[1];
 
     colorRange.forEach((t) => {
       linearGradient

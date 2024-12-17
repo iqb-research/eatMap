@@ -2,12 +2,25 @@
 % Please edit documentation in R/eatMap.R
 \name{eatMap}
 \alias{eatMap}
-\title{Plot a card.}
+\title{Plot the map of Germany}
 \usage{
-eatMap(data, width = NULL, height = NULL, elementId = NULL)
+eatMap(data, config, width = NULL, height = NULL, elementId = NULL)
+}
+\arguments{
+\item{data}{Data frame. Data to be displayed.}
+
+\item{config}{List. Configuration object for the display.}
+
+\item{width}{Character. Width of the app.}
+
+\item{height}{Character. Height of the app.}
+
+\item{elementId}{Character. Id of the app.}
 }
 \description{
-\if{html}{\out{
-<Add Description>
-}}
+Plots the map of Germany.
+}
+\examples{
+# eatMap()
+
 }

@@ -1,8 +1,19 @@
-#' Plot a card.
+#' Plot the map of Germany
 #'
-#' <Add Description>
+#' @description
+#' Plots the map of Germany.
+#'
+#'
+#' @param data Data frame. Data to be displayed.
+#' @param config List. Configuration object for the display.
+#' @param width Character. Width of the app.
+#' @param height Character. Height of the app.
+#' @param elementId Character. Id of the app.
 #'
 #' @import htmlwidgets
+#'
+#' @examples
+#' # eatMap()
 #'
 #' @export
 eatMap <- function(data, config, width = NULL, height = NULL, elementId = NULL) {

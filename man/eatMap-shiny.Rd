@@ -6,7 +6,7 @@
 \alias{renderEatMap}
 \title{Shiny bindings for eatMap}
 \usage{
-eatMapOutput(outputId, width = "100\%", height = "400px")
+eatMapOutput(outputId, width = "50\%", height = "50px")
 
 renderEatMap(expr, env = parent.frame(), quoted = FALSE)
 }

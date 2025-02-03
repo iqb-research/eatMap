@@ -9,3 +9,5 @@
 ^webpack\.common\.js$
 ^LICENSE\.md$
 test.R
+^\.github$
+^README\.Rmd$

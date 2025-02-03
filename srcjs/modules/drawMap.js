@@ -164,6 +164,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
     // Get current parameter
     const currentParameter = data[0].parameter;
     const { min, max } = config.parameter[currentParameter].range;
+    const { na_label = "Keine Daten" } = config;
 
     const reverse = config.parameter[currentParameter].reverse;
     const limits = reverse ? [max, min] : [min, max];
@@ -199,7 +200,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
         const stateData = data.find((el) => el.Bundesland === stateName);
 
         tooltip.html(
-          `<b>${stateName}</b></br>${stateData?.est_print || "keine Angabe"}`
+          `<b>${stateName}</b></br>${stateData?.est_print || na_label}`
         );
 
         tooltipGroup.style("visibility", "visible");

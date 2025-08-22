@@ -53,77 +53,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
       d3.select(this).style("fill-opacity", 1);
     });
 
-  // --- LEGEND FUNCTION ---
-  const addLegend = (
-    colorScale,
-    legendWidth = 20,
-    legendHeight = defaultLegendHeight,
-    spacing = 30
-  ) => {
-    const svgHeight = +svg.attr("height");
-
-    // Legend group
-    const legendGroup = svg
-      .append("g")
-      .attr("class", "legend")
-      .attr(
-        "transform",
-        `translate(${spacing}, ${(svgHeight - legendHeight) / 2})`
-      );
-
-    // Gradient
-    const defs = svg.append("defs");
-    const linearGradient = defs
-      .append("linearGradient")
-      .attr("id", "legend-gradient")
-      .attr("x1", "0%")
-      .attr("y1", "100%")
-      .attr("x2", "0%")
-      .attr("y2", "0%");
-
-    const colorRange = d3.range(0, 1.01, 0.1);
-    const [colorMin, colorMax] = colorScale.domain();
-
-    colorRange.forEach((t) => {
-      linearGradient
-        .append("stop")
-        .attr("offset", `${t * 100}%`)
-        .attr("stop-color", colorScale(colorMin + t * (colorMax - colorMin)));
-    });
-
-    legendGroup
-      .append("rect")
-      .attr("width", legendWidth)
-      .attr("height", legendHeight)
-      .style("fill", "url(#legend-gradient)");
-
-    const legendScale = d3
-      .scaleLinear()
-      .domain([colorMin, colorMax])
-      .range([legendHeight, 0]);
-
-    const legendAxis = d3
-      .axisRight(legendScale)
-      .ticks(5)
-      .tickFormat(d3.format(".0f"));
-
-    legendGroup
-      .append("g")
-      .attr("transform", `translate(${legendWidth},0)`)
-      .call(legendAxis)
-      .selectAll("text")
-      .style("font-size", "12px");
-
-    return {
-      legendGroup,
-      legendScale,
-    };
-  };
-
-  let legendHelpers;
-  let totalTriangle; // Keep reference to total triangle
-
-  // --- TOOLTIP (created once, always on top) ---
+  // --- TOOLTIP (always on top) ---
   const tooltipGroup = svg
     .append("g")
     .attr("id", "tooltip")
@@ -148,6 +78,75 @@ const drawMap = (containerId, width = 800, height = 900) => {
     tooltipGroup.attr("transform", `translate(${x + 30}, ${y + 30})`);
   });
 
+  // --- LEGEND FUNCTION ---
+  const addLegend = (
+    colorScale,
+    legendWidth = 20,
+    legendHeight = defaultLegendHeight,
+    spacing = 30
+  ) => {
+    const svgHeight = +svg.attr("height");
+
+    const legendGroup = svg
+      .append("g")
+      .attr("class", "legend")
+      .attr(
+        "transform",
+        `translate(${width - spacing - legendWidth}, ${
+          (svgHeight - legendHeight) / 2
+        })`
+      );
+
+    // Gradient
+    const defs = svg.append("defs");
+    const linearGradient = defs
+      .append("linearGradient")
+      .attr("id", "legend-gradient")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "0%")
+      .attr("y2", "0%");
+
+    const colorRange = d3.range(0, 1.01, 0.1);
+    const [colorMin, colorMax] = colorScale.domain();
+
+    colorRange.forEach((t) => {
+      linearGradient
+        .append("stop")
+        .attr("offset", `${t * 100}%`)
+        .attr("stop-color", colorScale(colorMin + t * (colorMax - colorMin)));
+    });
+
+    // Legend rectangle
+    legendGroup
+      .append("rect")
+      .attr("width", legendWidth)
+      .attr("height", legendHeight)
+      .style("fill", "url(#legend-gradient)");
+
+    // Axis on right side
+    const legendScale = d3
+      .scaleLinear()
+      .domain([colorMin, colorMax])
+      .range([legendHeight, 0]);
+    const legendAxis = d3
+      .axisRight(legendScale)
+      .ticks(5)
+      .tickFormat(d3.format(".0f"));
+
+    legendGroup
+      .append("g")
+      .attr("transform", `translate(${legendWidth},0)`)
+      .call(legendAxis)
+      .selectAll("text")
+      .style("font-size", "12px");
+
+    return { legendGroup, legendScale, legendWidth };
+  };
+
+  let legendHelpers;
+  let totalTriangle;
+
   // --- UPDATE MAP FUNCTION ---
   const updateMap = (data, config) => {
     const currentParameter = data[0].parameter;
@@ -163,6 +162,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
       .domain(limits)
       .interpolator(d3.interpolateViridis);
 
+    // Update states
     states
       .select("path")
       .attr("fill", (d) => {
@@ -180,20 +180,18 @@ const drawMap = (containerId, width = 800, height = 900) => {
         );
         tooltipGroup.style("visibility", "visible");
       })
-      .on("mouseout", function () {
-        tooltipGroup.style("visibility", "hidden");
-      });
+      .on("mouseout", () => tooltipGroup.style("visibility", "hidden"));
 
     // Remove old legend
     svg.select(".legend").remove();
 
-    // Add new legend (behind tooltip)
+    // Add new legend
     legendHelpers = addLegend(colorScale);
 
-    // Remove old total triangle if exists
+    // Remove old total triangle
     if (totalTriangle) totalTriangle.remove();
 
-    // Add total indicator
+    // Add total indicator to left of legend
     const totalData = data.find((d) => d.Bundesland === "total");
     if (totalData) {
       const triangleSize = 15;
@@ -212,23 +210,32 @@ const drawMap = (containerId, width = 800, height = 900) => {
         .attr("stroke", "black")
         .attr(
           "transform",
-          `translate(${30 - triangleSize}, ${legendY - triangleSize / 2})`
+          `translate(${
+            width - 30 - legendHelpers.legendWidth - triangleSize
+          }, ${legendY - triangleSize / 2})`
         )
         .style("cursor", "pointer");
 
+      // Tooltip on LEFT of triangle
       totalTriangle
         .on("mouseover", () => {
           tooltip.html(
             `<b>${total_label}</b></br>${totalData.est_print || na_label}`
           );
           tooltipGroup.style("visibility", "visible");
+
+          // Position tooltip to the LEFT of triangle
+          tooltipGroup.attr(
+            "transform",
+            `translate(${
+              width - 30 - legendHelpers.legendWidth - triangleSize - 610
+            }, ${legendY - triangleSize / 2})`
+          );
         })
-        .on("mouseout", () => {
-          tooltipGroup.style("visibility", "hidden");
-        });
+        .on("mouseout", () => tooltipGroup.style("visibility", "hidden"));
     }
 
-    // Ensure tooltip is drawn LAST → always on top
+    // Keep tooltip on top
     svg.node().appendChild(tooltipGroup.node());
   };
 

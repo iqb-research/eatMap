@@ -114,29 +114,6 @@ const drawMap = (containerId, width = 800, height = 900) => {
       .selectAll("text")
       .style("font-size", "12px");
 
-    // --- COMMENTED OUT: Moving indicator code ---
-    /*
-    const triangleSize = 10;
-
-    const backgroundTriangle = legendGroup
-      .append("polygon")
-      .attr(
-        "points",
-        `0,0 ${triangleSize},${triangleSize / 2} 0,${triangleSize}`
-      )
-      .attr("fill", "black")
-      .style("visibility", "hidden");
-
-    const indicator = legendGroup
-      .append("polygon")
-      .attr(
-        "points",
-        `0,0 ${triangleSize},${triangleSize / 2} 0,${triangleSize}`
-      )
-      .attr("fill", "black")
-      .style("visibility", "hidden");
-    */
-
     return {
       legendGroup,
       legendScale,
@@ -144,6 +121,32 @@ const drawMap = (containerId, width = 800, height = 900) => {
   };
 
   let legendHelpers;
+  let totalTriangle; // Keep reference to total triangle
+
+  // --- TOOLTIP (created once, always on top) ---
+  const tooltipGroup = svg
+    .append("g")
+    .attr("id", "tooltip")
+    .style("visibility", "hidden");
+
+  const tooltip = tooltipGroup
+    .append("foreignObject")
+    .attr("width", 600)
+    .attr("height", 500)
+    .append("xhtml:div")
+    .style("font-size", "20px")
+    .style("font-family", "Arial")
+    .style("border-radius", "8px")
+    .style("background-color", "rgba(0, 0, 0, 0.8)")
+    .style("color", "white")
+    .style("padding", "8px")
+    .style("position", "absolute")
+    .style("pointer-events", "none");
+
+  svg.on("mousemove", (e) => {
+    const [x, y] = d3.pointer(e);
+    tooltipGroup.attr("transform", `translate(${x + 30}, ${y + 30})`);
+  });
 
   // --- UPDATE MAP FUNCTION ---
   const updateMap = (data, config) => {
@@ -187,7 +190,10 @@ const drawMap = (containerId, width = 800, height = 900) => {
     // Add new legend (behind tooltip)
     legendHelpers = addLegend(colorScale);
 
-    // Add total indicator (still active)
+    // Remove old total triangle if exists
+    if (totalTriangle) totalTriangle.remove();
+
+    // Add total indicator
     const totalData = data.find((d) => d.Bundesland === "total");
     if (totalData) {
       const triangleSize = 15;
@@ -198,7 +204,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
         (height - defaultLegendHeight) / 2 +
         legendHelpers.legendScale(totalData.est);
 
-      const totalTriangle = svg
+      totalTriangle = svg
         .append("polygon")
         .attr("class", "total-indicator")
         .attr("points", trianglePoints)
@@ -225,31 +231,6 @@ const drawMap = (containerId, width = 800, height = 900) => {
     // Ensure tooltip is drawn LAST → always on top
     svg.node().appendChild(tooltipGroup.node());
   };
-
-  // --- TOOLTIP (created once, always on top by re-appending) ---
-  const tooltipGroup = svg
-    .append("g")
-    .attr("id", "tooltip")
-    .style("visibility", "hidden");
-
-  const tooltip = tooltipGroup
-    .append("foreignObject")
-    .attr("width", 600)
-    .attr("height", 500)
-    .append("xhtml:div")
-    .style("font-size", "20px")
-    .style("font-family", "Arial")
-    .style("border-radius", "8px")
-    .style("background-color", "rgba(0, 0, 0, 0.8)")
-    .style("color", "white")
-    .style("padding", "8px")
-    .style("position", "absolute")
-    .style("pointer-events", "none");
-
-  svg.on("mousemove", (e) => {
-    const [x, y] = d3.pointer(e);
-    tooltipGroup.attr("transform", `translate(${x + 30}, ${y + 30})`);
-  });
 
   return updateMap;
 };

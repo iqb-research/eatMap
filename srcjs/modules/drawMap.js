@@ -5,6 +5,8 @@ import styles from "./drawMap.css";
 const defaultLegendHeight = 300;
 
 const drawMap = (containerId, width = 800, height = 900) => {
+  let tooltipPosition = "state";
+
   // Container
   const container = d3
     .select(`#${containerId}`)
@@ -26,7 +28,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
     .geoMercator()
     .center([10.5, 51.7])
     .scale(4000)
-    .translate([width / 2, height / 2]);
+    .translate([width / 2.5, height / 2]);
   const path = d3.geoPath().projection(projection);
 
   // Draw states
@@ -75,7 +77,8 @@ const drawMap = (containerId, width = 800, height = 900) => {
 
   svg.on("mousemove", (e) => {
     const [x, y] = d3.pointer(e);
-    tooltipGroup.attr("transform", `translate(${x + 30}, ${y + 30})`);
+    const tooltipX = tooltipPosition === "state" ? x + 30 : x - 160;
+    tooltipGroup.attr("transform", `translate(${tooltipX}, ${y + 30})`);
   });
 
   // --- LEGEND FUNCTION ---
@@ -173,6 +176,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
           : "#ccc";
       })
       .on("mouseover", function (event, d) {
+        tooltipPosition = "state";
         const stateName = d.properties.NAME_1;
         const stateData = data.find((el) => el.Bundesland === stateName);
         tooltip.html(
@@ -219,6 +223,8 @@ const drawMap = (containerId, width = 800, height = 900) => {
       // Tooltip on LEFT of triangle
       totalTriangle
         .on("mouseover", () => {
+          tooltipPosition = "total";
+
           tooltip.html(
             `<b>${total_label}</b></br>${totalData.est_print || na_label}`
           );

@@ -16,12 +16,13 @@
 #' # eatMap()
 #'
 #' @export
-eatMap <- function(data, config, width = NULL, height = NULL, elementId = NULL) {
+eatMap <- function(data, config, lang = "de", width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
   x = list(
     data = purrr::list_transpose(as.list(data)),
-    config = config
+    config = config,
+    lang = lang
   )
 
   # create widget

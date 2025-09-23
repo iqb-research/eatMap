@@ -4,6 +4,35 @@ import styles from "./drawMap.css";
 
 const defaultLegendHeight = 300;
 
+// infos for translations if lang = en
+const stateTranslations = {
+      "Baden-Württemberg": "Baden-Wuerttemberg",
+      "Bayern": "Bavaria",
+      "Berlin": "Berlin",
+      "Brandenburg": "Brandenburg",
+      "Bremen": "Bremen",
+      "Hamburg": "Hamburg",
+      "Hessen": "Hesse",
+      "Mecklenburg-Vorpommern": "Mecklenburg-Western Pomerania",
+      "Niedersachsen": "Lower Saxony",
+      "Nordrhein-Westfalen": "North Rhine-Westphalia",
+      "Rheinland-Pfalz": "Rhineland-Palatinate",
+      "Saarland": "Saarland",
+      "Sachsen": "Saxony",
+      "Sachsen-Anhalt": "Saxony-Anhalt",
+      "Schleswig-Holstein": "Schleswig-Holstein",
+      "Thüringen": "Thuringia"
+};
+
+const getTooltipName = (deName, lang) => {
+      if (lang === "en" && stateTranslations[deName]) {
+        return stateTranslations[deName];
+      }
+      return deName;
+};
+
+
+
 const drawMap = (containerId, width = 800, height = 900) => {
   let tooltipPosition = "state";
 
@@ -151,7 +180,9 @@ const drawMap = (containerId, width = 800, height = 900) => {
   let totalTriangle;
 
   // --- UPDATE MAP FUNCTION ---
-  const updateMap = (data, config) => {
+  const updateMap = (data, config, lang = "de") => {
+    console.log("lang in updateMap:", lang);
+
     const currentParameter = data[0].parameter;
     const { min, max } = config.parameter[currentParameter].range;
     const { na_label = "Keine Daten" } = config;
@@ -177,14 +208,17 @@ const drawMap = (containerId, width = 800, height = 900) => {
       })
       .on("mouseover", function (event, d) {
         tooltipPosition = "state";
-        const stateName = d.properties.NAME_1;
-        const stateData = data.find((el) => el.Bundesland === stateName);
+        const stateNameDe = d.properties.NAME_1; // German, for lookup
+        const stateData = data.find((el) => el.Bundesland === stateNameDe);
+
+        // Translate only for display - THIS IS WHERE LANG IS NOW AVAILABLE
+        const tooltipName = getTooltipName(stateNameDe, lang); // Use the passed lang
+
         tooltip.html(
-          `<b>${stateName}</b></br>${stateData?.est_print || na_label}`
+          `<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`
         );
         tooltipGroup.style("visibility", "visible");
-      })
-      .on("mouseout", () => tooltipGroup.style("visibility", "hidden"));
+      });
 
     // Remove old legend
     svg.select(".legend").remove();

@@ -180,8 +180,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
   let totalTriangle;
 
   // --- UPDATE MAP FUNCTION ---
-  const updateMap = (data, config, lang = "de") => {
-    console.log("lang in updateMap:", lang);
+  const updateMap = (data, config, lang) => {
 
     const currentParameter = data[0].parameter;
     const { min, max } = config.parameter[currentParameter].range;
@@ -211,7 +210,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
         const stateNameDe = d.properties.NAME_1; // German, for lookup
         const stateData = data.find((el) => el.Bundesland === stateNameDe);
 
-        // Translate only for display - THIS IS WHERE LANG IS NOW AVAILABLE
+        // Translate only for display
         const tooltipName = getTooltipName(stateNameDe, lang); // Use the passed lang
 
         tooltip.html(

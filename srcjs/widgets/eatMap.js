@@ -14,7 +14,6 @@ HTMLWidgets.widget({
 
     return {
       renderValue: function ({ data, config, lang }) {
-        console.log("x from R:", x);
         // TODO: remove this hotfix when the Shiny environment only provides valid data!
         if (data.length !== 0) {
           updateMap(data, config, lang);

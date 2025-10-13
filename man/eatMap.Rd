@@ -18,6 +18,8 @@ eatMap(
 
 \item{config}{List. Configuration object for the display.}
 
+\item{lang}{String, "de" or "en"}
+
 \item{width}{Character. Width of the app.}
 
 \item{height}{Character. Height of the app.}

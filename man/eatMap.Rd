@@ -4,12 +4,21 @@
 \alias{eatMap}
 \title{Plot the map of Germany}
 \usage{
-eatMap(data, config, width = NULL, height = NULL, elementId = NULL)
+eatMap(
+  data,
+  config,
+  lang = "de",
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+)
 }
 \arguments{
 \item{data}{Data frame. Data to be displayed.}
 
 \item{config}{List. Configuration object for the display.}
+
+\item{lang}{String, "de" or "en"}
 
 \item{width}{Character. Width of the app.}
 

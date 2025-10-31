@@ -13,10 +13,10 @@ HTMLWidgets.widget({
     const updateMap = drawMap(el.id);
 
     return {
-      renderValue: function ({ data, config }) {
+      renderValue: function ({ data, config, lang }) {
         // TODO: remove this hotfix when the Shiny environment only provides valid data!
         if (data.length !== 0) {
-          updateMap(data, config);
+          updateMap(data, config, lang);
         }
       },
 

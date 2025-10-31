@@ -6,6 +6,7 @@
 #'
 #' @param data Data frame. Data to be displayed.
 #' @param config List. Configuration object for the display.
+#' @param lang String, "de" or "en"
 #' @param width Character. Width of the app.
 #' @param height Character. Height of the app.
 #' @param elementId Character. Id of the app.
@@ -16,12 +17,13 @@
 #' # eatMap()
 #'
 #' @export
-eatMap <- function(data, config, width = NULL, height = NULL, elementId = NULL) {
+eatMap <- function(data, config, lang = "de", width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
   x = list(
     data = purrr::list_transpose(as.list(data)),
-    config = config
+    config = config,
+    lang = lang
   )
 
   # create widget

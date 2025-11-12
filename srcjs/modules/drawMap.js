@@ -31,6 +31,9 @@ const getTooltipName = (deName, lang) => {
       return deName;
 };
 
+// Tooltip: "fixed" states
+// ... if a state is in this list, its tooltip stays fixed until klicked again
+let fixedTooltips = new Set(); // speichert Bundeslandnamen, die fixiert sind
 
 
 const drawMap = (containerId, width = 800, height = 900) => {
@@ -77,12 +80,24 @@ const drawMap = (containerId, width = 800, height = 900) => {
     .style("cursor", "default");
 
   states
-    .on("mouseover", function () {
+    .on("mouseover", function (event, d) {
+    const stateName = d.properties.NAME_1;
+    if (!fixedTooltips.has(stateName)) {
       d3.select(this).style("fill-opacity", 0.8);
-    })
-    .on("mouseout", function () {
+
+      const stateData = data.find(el => el.Bundesland === stateName);
+      const tooltipName = getTooltipName(stateName, lang);
+      tooltip.html(`<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`);
+      tooltipGroup.style("visibility", "visible");
+    }
+  })
+  .on("mouseout", function (event, d) {
+    const stateName = d.properties.NAME_1;
+    if (!fixedTooltips.has(stateName)) {
       d3.select(this).style("fill-opacity", 1);
-    });
+      tooltipGroup.style("visibility", "hidden");
+    }
+  });
 
   // --- TOOLTIP (always on top) ---
   const tooltipGroup = svg
@@ -217,6 +232,76 @@ const drawMap = (containerId, width = 800, height = 900) => {
           `<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`
         );
         tooltipGroup.style("visibility", "visible");
+      })
+
+      .on("click", function (event, d) {
+        const stateName = d.properties.NAME_1;
+        const stateData = data.find(el => el.Bundesland === stateName);
+        const tooltipName = getTooltipName(stateName, lang);
+
+        if (fixedTooltips.has(stateName)) {
+          // Bundesland war fixiert → wieder loslösen
+          fixedTooltips.delete(stateName);
+          d3.select(this).style("fill-opacity", 1);
+          svg.select(`#fixed-tooltip-${stateName.replace(/\s/g, '-')}`).remove();
+        } else {
+          // Bundesland fixieren
+          fixedTooltips.add(stateName);
+          d3.select(this).style("fill-opacity", 0.8);
+
+          // Tooltip mittig über dem Bundesland positionieren
+          const [cx, cy] = path.centroid(d);
+
+          // Kleine manuelle Offsets, um Überlappung zu vermeiden
+          let offsetX = 0;
+          let offsetY = 0;
+
+          if (stateName === "Berlin") {
+            offsetX = 5; // leicht nach rechts
+            offsetY = -25; // nach oben
+          }
+          if (stateName === "Brandenburg") {
+            offsetX = -40; // leicht nach links
+            offsetY = 20;  // nach unten
+          }
+          if (stateName === "Sachsen") {
+            offsetX = 0;
+            offsetY = -30;  // nach oben
+          }
+          if (stateName === "Sachsen-Anhalt") {
+            offsetX = 0;
+            offsetY = 20;  // nach unten
+          }
+          if (stateName === "Hessen") {
+            offsetX = 0;
+            offsetY = 20;  // nach unten
+          }
+          if (stateName === "Hamburg") {
+            offsetX = -25;
+            offsetY = -10;  // nach oben
+          }
+
+
+
+          // Tooltip-Container erstellen
+          const fixedGroup = svg.append("g")
+            .attr("id", `fixed-tooltip-${stateName.replace(/\s/g, '-')}`);
+
+          fixedGroup.append("foreignObject")
+            .attr("width", 200)
+            .attr("height", 100)
+            .attr("x", cx + offsetX)
+            .attr("y", cy + offsetY)
+            .append("xhtml:div")
+            .style("font-size", "14px")
+            .style("font-family", "Arial")
+            .style("border-radius", "8px")
+            .style("background-color", "rgba(0, 0, 0, 0.8)")
+            .style("color", "white")
+            .style("padding", "5px")
+            .style("box-shadow", "2px 2px 6px rgba(0,0,0,0.3)")
+            .html(`<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`);
+        }
       });
 
     // Remove old legend

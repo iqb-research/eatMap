@@ -26,7 +26,7 @@ data <- data[data$cycle == "9. Klasse: Sprachen" &
 #install.packages("packer")
 #packer::npm_install()
 
-packer::bundle()
+#packer::bundle()
 
 # ... bundles the changes into eatMap\inst\htmlwidgets
 

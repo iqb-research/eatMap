@@ -219,6 +219,20 @@ const drawMap = (containerId, width = 800, height = 900) => {
         tooltipGroup.style("visibility", "visible");
       });
 
+    // --- update fixed tooltip contents ---
+    fixedTooltips.forEach(stateName => {
+      const stateData = data.find(d => d.Bundesland === stateName);
+      const tooltipName = getTooltipName(stateName, lang);
+
+      const tooltipNode = svg
+        .select(`#fixed-tooltip-${stateName.replace(/\s/g, '-')}`)
+        .select("div");
+
+      if (tooltipNode.size() > 0) {
+        tooltipNode.html(`<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`);
+      }
+    });
+
     // Remove old legend
     svg.select(".legend").remove();
 

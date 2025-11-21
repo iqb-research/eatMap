@@ -32,4 +32,4 @@ packer::bundle()
 
 # Test the map -----------------------------------------------------------------
 
-eatMap(data, config$de, lang = "en")
+eatMap(data, config$de, lang = "de")

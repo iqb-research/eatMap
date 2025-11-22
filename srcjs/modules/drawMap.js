@@ -281,8 +281,6 @@ const drawMap = (containerId, width = 800, height = 900) => {
             offsetY = -10;  // nach oben
           }
 
-
-
           // Tooltip-Container erstellen
           const fixedGroup = svg.append("g")
             .attr("id", `fixed-tooltip-${stateName.replace(/\s/g, '-')}`);
@@ -301,6 +299,26 @@ const drawMap = (containerId, width = 800, height = 900) => {
             .style("padding", "5px")
             .style("box-shadow", "2px 2px 6px rgba(0,0,0,0.3)")
             .html(`<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`);
+        }
+      });
+
+      // --- Update FIXED tooltips if they exist ---
+      fixedTooltips.forEach(stateName => {
+        const stateData = data.find(el => el.Bundesland === stateName);
+        const f = geojson.features.find(f => f.properties.NAME_1 === stateName);
+
+        if (!f || !stateData) return;
+
+        const [cx, cy] = path.centroid(f);
+        const tooltipName = getTooltipName(stateName, lang);
+
+        const id = `fixed-tooltip-${stateName.replace(/\s/g, '-')}`;
+        const fixedGroup = svg.select(`#${id}`);
+
+        if (!fixedGroup.empty()) {
+          fixedGroup.select("foreignObject")
+            .select("div")
+            .html(`<b>${tooltipName}</b></br>${stateData.est_print || na_label}`);
         }
       });
 

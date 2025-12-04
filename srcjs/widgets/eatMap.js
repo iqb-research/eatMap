@@ -1,9 +1,12 @@
 import "widgets";
 import { drawMap } from "../modules/drawMap.js";
 
+let currentData = [];
+let currentConfig = {};
+let currentLang = "de";
+
 HTMLWidgets.widget({
   name: "eatMap",
-
   type: "output",
 
   factory: function (el, width, height) {
@@ -14,7 +17,11 @@ HTMLWidgets.widget({
 
     return {
       renderValue: function ({ data, config, lang }) {
-        // TODO: remove this hotfix when the Shiny environment only provides valid data!
+        currentData = data;
+        currentConfig = config;
+        currentLang = lang;
+
+        // Verhindere Shiny-Initialfehler
         if (data.length !== 0) {
           updateMap(data, config, lang);
         }
@@ -23,7 +30,6 @@ HTMLWidgets.widget({
       resize: function (width, height) {
         el.style.width = width;
         el.style.height = height;
-        // TODO: code to re-render the widget with a new size
       },
     };
   },

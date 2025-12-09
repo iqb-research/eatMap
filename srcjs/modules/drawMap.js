@@ -296,6 +296,30 @@ const drawMap = (containerId, width = 800, height = 900) => {
         }
       });
 
+      // --- Hide tooltip when NOT over any state (including gaps) ---
+      svg.on("mousemove.hideTooltip", function (event) {
+        // Nur ausblenden, wenn wir im State-Modus sind
+        if (tooltipPosition !== "state") return;
+
+        const [mouseX, mouseY] = d3.pointer(event);
+
+        // Prüfe, ob Maus wirklich über einem gezeichneten Bundesland liegt
+        const isOverState = svg
+          .selectAll(".state")
+          .nodes()
+          .some(node => {
+            const pt = node.ownerSVGElement.createSVGPoint();
+            pt.x = mouseX;
+            pt.y = mouseY;
+            return node.isPointInFill(pt);
+          });
+
+        // Wenn nicht über einem Path Tooltip ausblenden
+        if (!isOverState) {
+          tooltipGroup.style("visibility", "hidden");
+        }
+      });
+
       // --- Update FIXED tooltips if they exist ---
       fixedTooltips.forEach(stateName => {
         const stateData = data.find(el => el.Bundesland === stateName);

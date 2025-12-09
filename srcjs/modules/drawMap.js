@@ -105,10 +105,20 @@ const drawMap = (containerId, width = 800, height = 900) => {
     tooltipGroup.attr("transform", `translate(${tooltipX}, ${y + 30})`);
   });
 
-  svg.on("mouseleave", () => {
-    tooltipGroup.style("visibility", "hidden");
-  });
+  // HIDE tooltip when mouse is NOT over any state's path
+  svg.on("mousemove", function (event) {
+    const [mx, my] = d3.pointer(event);
 
+    // Prüfe, ob Maus über einem State-Path ist
+    const isOverState = svg
+      .selectAll(".state")
+      .nodes()
+      .some(node => node.isPointInFill(node.getScreenCTM().inverse().transformPoint({ x: event.clientX, y: event.clientY })));
+
+    if (!isOverState && tooltipPosition === "state") {
+      tooltipGroup.style("visibility", "hidden");
+    }
+  });
   // --- LEGEND FUNCTION ---
   const addLegend = (
     colorScale,

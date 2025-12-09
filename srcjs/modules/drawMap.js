@@ -105,6 +105,10 @@ const drawMap = (containerId, width = 800, height = 900) => {
     tooltipGroup.attr("transform", `translate(${tooltipX}, ${y + 30})`);
   });
 
+  svg.on("mouseleave", () => {
+    tooltipGroup.style("visibility", "hidden");
+  });
+
   // --- LEGEND FUNCTION ---
   const addLegend = (
     colorScale,

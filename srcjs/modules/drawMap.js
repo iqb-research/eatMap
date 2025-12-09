@@ -79,26 +79,6 @@ const drawMap = (containerId, width = 800, height = 900) => {
     .style("stroke-width", 0.5)
     .style("cursor", "default");
 
-  states
-    .on("mouseover", function (event, d) {
-    const stateName = d.properties.NAME_1;
-    if (!fixedTooltips.has(stateName)) {
-      d3.select(this).style("fill-opacity", 0.8);
-
-      const stateData = data.find(el => el.Bundesland === stateName);
-      const tooltipName = getTooltipName(stateName, lang);
-      tooltip.html(`<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`);
-      tooltipGroup.style("visibility", "visible");
-    }
-  })
-  .on("mouseout", function (event, d) {
-    const stateName = d.properties.NAME_1;
-    if (!fixedTooltips.has(stateName)) {
-      d3.select(this).style("fill-opacity", 1);
-      tooltipGroup.style("visibility", "hidden");
-    }
-  });
-
   // --- TOOLTIP (always on top) ---
   const tooltipGroup = svg
     .append("g")

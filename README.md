@@ -17,7 +17,7 @@ You can install the development version of eatMap from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("franikowsp/eatMap")
+devtools::install_github("iqb-research/eatMap")
 ```
 
 ## Example

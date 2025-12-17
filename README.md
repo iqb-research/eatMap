@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/franikowsp/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franikowsp/eatMap/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of eatMap is to …

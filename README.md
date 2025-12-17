@@ -8,7 +8,12 @@
 [![R-CMD-check](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of eatMap is to …
+The goal of eatMap is to provide a map.
+
+## Package governance
+
+This package was originally authored and created by Philipp Franikowski.
+**Current package maintenance** is provided by Alina Apel and Karoline A. Sachse.
 
 ## Installation
 

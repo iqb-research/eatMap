@@ -213,6 +213,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
         );
         tooltipGroup.style("visibility", "visible");
       })
+      .on("mouseout", () => tooltipGroup.style("visibility", "hidden"))
 
       .on("click", function (event, d) {
         const stateName = d.properties.NAME_1;

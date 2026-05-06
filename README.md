@@ -1,5 +1,5 @@
 
-# eatMap
+# eatMap <img src="man/figures/logo.svg" align="right" height="180" alt="eatMap logo" />
 
 <!-- badges: start -->
 

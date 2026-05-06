@@ -91,7 +91,7 @@ map_data <- map_data[map_data$cycle == "9. Klasse: Sprachen" &
 
 <strong>Which corresponds to...</strong>
 
-<img src="./vignettes/images/BTShinyApp_selection_example.png" width="250">
+<img src="man/figures/BTShinyApp_selection_example.png" width="250">
 
 </td>
 </tr>
@@ -110,7 +110,7 @@ eatMap(
 ```
 
 ```{r, out.width = "50%", echo = FALSE}
-knitr::include_graphics("./vignettes/images/eatMap_example.png")
+knitr::include_graphics("man/figures/eatMap_example.png")
 ```
 
 ## The flow inside BTShinyApp

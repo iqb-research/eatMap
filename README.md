@@ -89,7 +89,7 @@ reading results for grade 9, cycle `"9. Klasse: Sprachen"`, parameter
 
 <strong>Which corresponds to…</strong>
 
-<img src="./vignettes/images/BTShinyApp_selection_example.png" width="250">
+<img src="man/figures/BTShinyApp_selection_example.png" width="250">
 
 </td>
 </tr>
@@ -105,7 +105,7 @@ eatMap(
 )
 ```
 
-<img src="./vignettes/images/eatMap_example.png" width="50%" />
+<img src="man/figures/eatMap_example.png" width="50%" />
 
 ## The flow inside BTShinyApp
 

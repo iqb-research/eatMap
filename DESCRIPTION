@@ -12,3 +12,4 @@ RoxygenNote: 7.3.2
 Imports: 
     htmlwidgets,
     purrr
+URL: https://iqb-research.github.io/eatMap/

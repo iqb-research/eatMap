@@ -66,9 +66,9 @@ load(
 
 The object `BTdata` contains the processed Bildungstrend data. The file `ui_variables.rda` provides additional UI/configuration objects, including the `config` object used by `eatMap()`.
 
-Next, we simulate a data selection that usually happens in the BTShinyAPP user interface.
+Next, we simulate a data selection that usually happens in the `BTShinyApp` user interface.
 
-This selects one concrete subset of the Bildungstrend data: German reading results for grade 9, cycle `"9. Klasse: Sprachen"`, parameter `"mean"`, year `2022`, and target population `"alle"`...
+This selects one concrete subset of the Bildungstrend data: German reading results for grade 9, cycle `"9. Klasse: Sprachen"`, parameter `"mean"`, year `2022`, and target population `"alle"`.
 
 <table>
 <tr>

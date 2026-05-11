@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/franikowsp/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franikowsp/eatMap/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `eatMap` is a helper package that transforms the input data frame from
@@ -72,7 +72,9 @@ reading results for grade 9, cycle `"9. Klasse: Sprachen"`, parameter
 `"mean"`, year `2022`, and target population `"alle"`…
 
 <table>
+
 <tr>
+
 <td width="50%" valign="top">
 
 <strong>Code</strong>
@@ -83,8 +85,10 @@ reading results for grade 9, cycle `"9. Klasse: Sprachen"`, parameter
                map_data$year == 2022 &
                map_data$fachKb == "Deutsch-Lesen" &
                map_data$targetPop == "alle",]
-  &#10;)</code></pre>
+  &#10;</code></pre>
+
 </td>
+
 <td width="50%" valign="top">
 
 <strong>Which corresponds to…</strong>
@@ -92,7 +96,9 @@ reading results for grade 9, cycle `"9. Klasse: Sprachen"`, parameter
 <img src="man/figures/BTShinyApp_selection_example.png" width="250">
 
 </td>
+
 </tr>
+
 </table>
 
 Then, you can render the map locally:

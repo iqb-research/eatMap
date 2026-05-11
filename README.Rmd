@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 # eatMap <img src="man/figures/logo.svg" align="right" height="180" alt="eatMap logo" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/franikowsp/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franikowsp/eatMap/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/iqb-research/eatMap/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `eatMap` is a helper package that transforms the input data frame from the [BT-ShinyApp](https://github.com/iqb-research/BT-ShinyApp) into an interactive widget using JavaScript. It is a small R wrapper around a JavaScript/htmlwidgets map of Germany for displaying IQB Bildungstrend
@@ -84,7 +84,7 @@ map_data <- map_data[map_data$cycle == "9. Klasse: Sprachen" &
                map_data$fachKb == "Deutsch-Lesen" &
                map_data$targetPop == "alle",]
   
-)</code></pre>
+</code></pre>
 
 </td>
 <td width="50%" valign="top">

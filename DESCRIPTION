@@ -1,6 +1,6 @@
 Package: eatMap
 Title: Provides a Colored Map of Germany
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
     person("Philipp", "Franikowski", email = "philipp.franikowski@iqb.hu-berlin.de", role = c("aut", "cre")),
     person("Alina", "Apel", email = "alina.apel.2@hu-berlin.de", role = "ctb")

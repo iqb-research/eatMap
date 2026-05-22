@@ -39,6 +39,9 @@ let fixedTooltips = new Set(); // speichert Bundeslandnamen, die fixiert sind
 const drawMap = (containerId, width = 800, height = 900) => {
   let tooltipPosition = "state";
 
+  const supportsHover =
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
   // Container
   const container = d3
     .select(`#${containerId}`)
@@ -99,11 +102,11 @@ const drawMap = (containerId, width = 800, height = 900) => {
     .style("position", "absolute")
     .style("pointer-events", "none");
 
-  svg.on("mousemove", (e) => {
+  svg.on("mousemove", supportsHover ? (e) => {
     const [x, y] = d3.pointer(e);
     const tooltipX = tooltipPosition === "state" ? x + 30 : x - 160;
     tooltipGroup.attr("transform", `translate(${tooltipX}, ${y + 30})`);
-  });
+  } : null);
 
   // --- LEGEND FUNCTION ---
   const addLegend = (
@@ -200,7 +203,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
           ? colorScale(Math.max(min, Math.min(max, stateData.est)))
           : "#ccc";
       })
-      .on("mouseover", function (event, d) {
+      .on("mouseover", supportsHover ? function (event, d) {
         tooltipPosition = "state";
         const stateNameDe = d.properties.NAME_1; // German, for lookup
         const stateData = data.find((el) => el.Bundesland === stateNameDe);
@@ -212,8 +215,8 @@ const drawMap = (containerId, width = 800, height = 900) => {
           `<b>${tooltipName}</b></br>${stateData?.est_print || na_label}`
         );
         tooltipGroup.style("visibility", "visible");
-      })
-      .on("mouseout", () => tooltipGroup.style("visibility", "hidden"))
+      } : null)
+      .on("mouseout", supportsHover ? () => tooltipGroup.style("visibility", "hidden") : null)
 
       .on("click", function (event, d) {
         const stateName = d.properties.NAME_1;
@@ -339,7 +342,7 @@ const drawMap = (containerId, width = 800, height = 900) => {
 
       // Tooltip on LEFT of triangle
       totalTriangle
-        .on("mouseover", () => {
+        .on("mouseover", supportsHover ? () => {
           tooltipPosition = "total";
 
           tooltip.html(
@@ -354,8 +357,8 @@ const drawMap = (containerId, width = 800, height = 900) => {
               width - 30 - legendHelpers.legendWidth - triangleSize - 610
             }, ${legendY - triangleSize / 2})`
           );
-        })
-        .on("mouseout", () => tooltipGroup.style("visibility", "hidden"));
+        } : null)
+        .on("mouseout", supportsHover ? () => tooltipGroup.style("visibility", "hidden") : null);
     }
 
     // Keep tooltip on top
